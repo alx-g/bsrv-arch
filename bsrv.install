@@ -1,0 +1,33 @@
+post_install () {
+    echo "-> Setting up virtualenv and installing required packages using pip..."
+    python3 -m venv "/usr/lib/bsrv/venv"
+    source "/usr/lib/bsrv/venv/bin/activate"
+    python3 -m pip install -r "/usr/lib/bsrv/requirements.txt" -qq
+    deactivate
+    ln -sf "/usr/lib/bsrv/bsrvd.sh" "/usr/bin/bsrvd"
+    ln -sf "/usr/lib/bsrv/bsrvstatd.sh" "/usr/bin/bsrvstatd"
+    ln -sf "/usr/lib/bsrv/bsrvcli.sh" "/usr/bin/bsrvcli"
+    ln -sf "/usr/lib/bsrv/bsrvtray.sh" "/usr/bin/bsrvtray"
+    systemctl daemon-reload
+}
+
+pre_remove () {
+    enabled="$(systemctl is-enabled bsrvd)"
+    if [[ "$enabled" == "enabled" ]]; then
+        systemctl stop bsrvd
+    fi
+    enabled="$(systemctl is-enabled bsrvstatd)"
+    if [[ "$enabled" == "enabled" ]]; then
+        systemctl stop bsrvstatd
+    fi
+}
+
+post_remove () {
+    rm -r /usr/lib/bsrv/venv
+    rmdir /usr/lib/bsrv
+    rm /usr/bin/bsrvd
+    rm /usr/bin/bsrvstatd
+    rm /usr/bin/bsrvcli
+    rm /usr/bin/bsrvtray
+    systemctl daemon-reload
+}
