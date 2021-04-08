@@ -1,8 +1,10 @@
 post_install () {
-    echo "-> Setting up virtualenv and installing required packages using pip..."
+    echo "-> Setting up virtualenv..."
     python3 -m venv "/usr/lib/bsrv/venv"
     source "/usr/lib/bsrv/venv/bin/activate"
-    python3 -m pip install -r "/usr/lib/bsrv/requirements.txt" -qq
+
+    echo "-> Installing required packages using pip..."
+    python3 -m pip --no-input --disable-pip-version-check --isolated install -r "/usr/lib/bsrv/requirements.txt"
     deactivate
     ln -sf "/usr/lib/bsrv/bsrvd.sh" "/usr/bin/bsrvd"
     ln -sf "/usr/lib/bsrv/bsrvstatd.sh" "/usr/bin/bsrvstatd"

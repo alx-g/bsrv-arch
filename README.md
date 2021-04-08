@@ -6,7 +6,7 @@ This Repository contains the PKGBUILD for [bsrv](https://github.com/alx-g/bsrv) 
 Clone this repository, then run
 
 ```bash
-makepkg -i
+makepkg -si
 ```
 
 in this folder to download and install the latest version of [bsrv](https://github.com/alx-g/bsrv).

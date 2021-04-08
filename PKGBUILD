@@ -8,6 +8,7 @@ arch=('any')
 depends=('python'
          'gobject-introspection'
          'qt5-base'
+         'borg'
          'libsystemd')
 makedepends=('python-setuptools'
              'python-pip')
