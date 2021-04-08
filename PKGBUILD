@@ -13,13 +13,13 @@ makedepends=('python-setuptools'
              'python-pip')
 checkdepends=()
 backup=()
-source=("$pkgname-$pkgver.tar.gz::https://files.alx-g.de/$pkgname/$pkgname-$pkgver.tar.gz")
-sha256sums=('c09bfc3be4f104c8a8b8f79df803b52551108c821af54450e1805ffa7e4c0d14')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/alx-g/$pkgname/archive/refs/tags/v$pkgver.tar.gz")
+sha256sums=('24774cd7ea72178f8c4e33bf139593c7b59a628fdca2a1f912d71e5c1097e2c9')
 install='bsrv.install'
 
 prepare() {
     # Setup all absolute paths in shell scripts
-    cd "$srcdir/"
+    cd "$srcdir/$pkgname-$pkgver"
     sed -i "s|{{INSTALL_DIR}}|/usr/lib/$pkgname|g" ./src/bsrvd.sh
     sed -i "s|{{INSTALL_DIR}}|/usr/lib/$pkgname|g" ./src/bsrvstatd.sh
     sed -i "s|{{INSTALL_DIR}}|/usr/lib/$pkgname|g" ./src/bsrvcli.sh
@@ -30,7 +30,7 @@ prepare() {
 
 package() {
     # Install dbus and systemd config files
-    cd "$srcdir/"
+    cd "$srcdir/$pkgname-$pkgver"
     install -Dm644 configs/dbus/de.alxg.bsrvd.conf "$pkgdir"/usr/share/dbus-1/system.d/de.alxg.bsrvd.conf
     install -Dm644 configs/dbus/de.alxg.bsrvd.service "$pkgdir"/usr/share/dbus-1/system-services/de.alxg.bsrvd.service
     install -Dm644 configs/systemd/bsrvd.service "$pkgdir"/usr/lib/systemd/system/bsrvd.service

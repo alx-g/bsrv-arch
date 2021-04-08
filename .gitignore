@@ -1,4 +1,4 @@
 bsrv-*.tar.gz
-bsrv-*.pkg.tar.zst
+bsrv-*.pkg.*
 pkg/
 src/
