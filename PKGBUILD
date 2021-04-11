@@ -60,10 +60,20 @@ package() {
     chmod 755 "$pkgdir/usr/lib/$pkgname/bsrvcli.sh"
     chmod 755 "$pkgdir/usr/lib/$pkgname/bsrvtray.sh"
 
+    # make venv dir so pacman knows about it
+    mkdir "$pkgdir/usr/lib/$pkgname/venv"
+
     # Install bsrv assets
     cd ../
     mkdir -p "$pkgdir/usr/share/$pkgname"
     cp "assets" "$pkgdir/usr/share/$pkgname/" -r
     chmod 644 "$pkgdir/usr/share/$pkgname" -R
     chmod +X  "$pkgdir/usr/share/$pkgname" -R
+
+    # Touch /usr/bin symlinks so pacman knows about them
+    mkdir "$pkgdir/usr/bin"
+    touch "$pkgdir/usr/bin/bsrvd"
+    touch "$pkgdir/usr/bin/bsrvstatd"
+    touch "$pkgdir/usr/bin/bsrvcli"
+    touch "$pkgdir/usr/bin/bsrvtray"
 }

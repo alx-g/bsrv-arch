@@ -1,35 +1,38 @@
 post_install () {
+    # Setup venv
     echo "-> Setting up virtualenv..."
     python3 -m venv "/usr/lib/bsrv/venv"
     source "/usr/lib/bsrv/venv/bin/activate"
-
     echo "-> Installing required packages using pip..."
     python3 -m pip --no-input --disable-pip-version-check --isolated install -r "/usr/lib/bsrv/requirements.txt"
     deactivate
+
+    # Overwrite touched files in /usr/bin with working symlinks
     ln -sf "/usr/lib/bsrv/bsrvd.sh" "/usr/bin/bsrvd"
     ln -sf "/usr/lib/bsrv/bsrvstatd.sh" "/usr/bin/bsrvstatd"
     ln -sf "/usr/lib/bsrv/bsrvcli.sh" "/usr/bin/bsrvcli"
     ln -sf "/usr/lib/bsrv/bsrvtray.sh" "/usr/bin/bsrvtray"
+
+    # Make sure systemd finds the new service files
     systemctl daemon-reload
 }
 
 pre_remove () {
-    enabled="$(systemctl is-enabled bsrvd)"
-    if [[ "$enabled" == "enabled" ]]; then
-        systemctl stop bsrvd
-    fi
-    enabled="$(systemctl is-enabled bsrvstatd)"
-    if [[ "$enabled" == "enabled" ]]; then
-        systemctl stop bsrvstatd
-    fi
+    # Make sure services are stopped
+    systemctl stop bsrvd
+    systemctl stop bsrvstatd
+
+    # Remove venv
+    rm -r /usr/lib/bsrv/venv
+
+    # Remove python cache files
+    find /usr/lib/bsrv -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
 }
 
 post_remove () {
-    rm -r /usr/lib/bsrv/venv
-    rmdir /usr/lib/bsrv
-    rm /usr/bin/bsrvd
-    rm /usr/bin/bsrvstatd
-    rm /usr/bin/bsrvcli
-    rm /usr/bin/bsrvtray
+    # Make sure systemd removes the deleted services
     systemctl daemon-reload
+
+    # Alert user
+    echo "Note: bsrvd and bsrvstatd use cache files. They were not removed, as their location is configurable. The default directory is /var/lib/bsrvd."
 }
