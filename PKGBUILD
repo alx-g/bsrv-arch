@@ -1,7 +1,7 @@
 pkgbase=bsrv
 pkgname=($pkgbase
          $pkgbase-tray)
-pkgver=0.0.2
+pkgver=0.0.3
 pkgrel=1
 pkgdesc='daemon to schedule and run borg backups automatically'
 url='https://github.com/alx-g/bsrv'
@@ -18,7 +18,7 @@ makedepends=('python-setuptools'
 checkdepends=()
 backup=()
 source=("$pkgbase-$pkgver.tar.gz::https://github.com/alx-g/$pkgbase/archive/refs/tags/v$pkgver.tar.gz")
-sha256sums=('bd36643cd32a68af32edc2ae6047cc569016a12c7dcf8291e7aab32c616c5e66')
+sha256sums=('5ebee0782b0434f14f9a7e8208423990835713b2892d01fdb246dfd333950fd4')
 install='bsrv.install'
 
 prepare() {
