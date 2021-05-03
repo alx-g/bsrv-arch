@@ -1,7 +1,7 @@
 post_install () {
     # Setup venv
     echo "-> Setting up virtualenv..."
-    python3 -m venv "/usr/lib/bsrv/venv"
+    python3 -m venv --system-site-packages "/usr/lib/bsrv/venv" 
     source "/usr/lib/bsrv/venv/bin/activate"
     echo "-> Installing required packages using pip..."
     python3 -m pip --no-input --disable-pip-version-check --isolated install -r "/usr/lib/bsrv/requirements.txt"
@@ -11,7 +11,6 @@ post_install () {
     ln -sf "/usr/lib/bsrv/bsrvd.sh" "/usr/bin/bsrvd"
     ln -sf "/usr/lib/bsrv/bsrvstatd.sh" "/usr/bin/bsrvstatd"
     ln -sf "/usr/lib/bsrv/bsrvcli.sh" "/usr/bin/bsrvcli"
-    ln -sf "/usr/lib/bsrv/bsrvtray.sh" "/usr/bin/bsrvtray"
 
     # Make sure systemd finds the new service files
     systemctl daemon-reload

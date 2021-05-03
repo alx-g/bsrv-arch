@@ -1,0 +1,16 @@
+post_install () {
+    # Setup venv
+    echo "-> Setting up virtualenv..."
+    echo "-> Installing required packages using pip..."
+    source "/usr/lib/bsrv/venv/bin/activate"
+    python3 -m pip --no-input --disable-pip-version-check --isolated install -r "/usr/lib/bsrv/requirements_tray.txt"
+    deactivate
+
+    # Overwrite touched files in /usr/bin with working symlinks
+    ln -sf "/usr/lib/bsrv/bsrvtray.sh" "/usr/bin/bsrvtray"
+}
+
+pre_remove () {
+    # Remove python cache files
+    find /usr/lib/bsrv/bsrvtray -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
+}
